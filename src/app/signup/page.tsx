@@ -5,14 +5,14 @@ import TextField from "../components/TextField";
 
 export default function Page() {
   return (
-    <main className="tablet:justify-center tablet:items-center flex h-screen w-full flex-col gap-16 p-8">
+    <main className="flex h-screen w-full flex-col gap-16 p-8 tablet:items-center tablet:justify-center">
       <Image
         src="/images/logo-devlinks-large.svg"
         alt="devlinks logo"
         width={182.5}
         height={40}
       />
-      <section className="tablet:bg-white tablet:w-[476px] flex flex-col gap-10 rounded-xl tablet:p-10">
+      <section className="flex flex-col gap-10 rounded-xl tablet:w-[476px] tablet:bg-white tablet:p-10">
         <div className="flex flex-col gap-2">
           <h2 className="text-heading-md-mobile font-bold">Create account</h2>
           <p className="text-gray">
@@ -20,10 +20,15 @@ export default function Page() {
           </p>
         </div>
 
-        <form className="flex flex-col gap-6">
+        <form
+          className="flex flex-col gap-6"
+          method="POST"
+          action="/auth/signup"
+        >
           <TextField
             label="Email address"
             id="register-email"
+            name="register-email"
             icon="/images/icon-email.svg"
             placeholder="e.g. alex@email.com"
             className="w-full"
@@ -32,16 +37,20 @@ export default function Page() {
           <TextField
             label="Create password"
             id="register-password"
+            name="register-password"
             icon="/images/icon-password.svg"
             placeholder="At least 8 characters"
+            type="password"
             className="w-full"
           />
 
           <TextField
             label="Confirm password"
             id="register-password-confirm"
+            name="register-password-confirm"
             icon="/images/icon-password.svg"
             placeholder="At least 8 characters"
+            type="password"
             className="w-full"
           />
 
