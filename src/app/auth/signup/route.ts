@@ -1,26 +1,44 @@
-import { Database } from "@/types/supabase";
+import { Database } from "@/lib/types/supabase";
 import { cookies } from "next/headers";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
+function validatePassword(password: string): boolean {
+  return password.length >= 8;
+}
+
 export async function POST(request: Request) {
   const requestUrl = new URL(request.url);
-  const formData = await request.formData();
-  const email = String(formData.get("register-email"));
-  const password = String(formData.get("register-password"));
+  const { email, password, passwordConfirm } = await request.json();
   const supabase = createRouteHandlerClient<Database>({ cookies });
 
-  await supabase.auth.signUp({
+  if (!validatePassword(password) || password !== passwordConfirm)
+    return NextResponse.json(
+      { error: "Password does not meet requirements" },
+      { status: 400 },
+    );
+
+  const { data } = supabase.storage
+    .from("avatars")
+    .getPublicUrl("placeholder.png");
+
+  const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
+      data: {
+        name: email,
+        avatar: data.publicUrl,
+      },
       emailRedirectTo: `${requestUrl.origin}/auth/callback`,
     },
   });
 
-  return NextResponse.redirect(requestUrl.origin, {
-    status: 301,
-  });
+  if (error) {
+    return NextResponse.json({ error: error }, { status: 400 });
+  }
+
+  return NextResponse.json({ data: "user has been created" }, { status: 301 });
 }
