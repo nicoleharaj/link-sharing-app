@@ -2,7 +2,11 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Instrument_Sans } from "next/font/google";
 
-const instrument = Instrument_Sans({ subsets: ["latin"] });
+const instrument = Instrument_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-instrument-sans',
+})
 
 export const metadata: Metadata = {
   title: "Frontend Mentor | Link-sharing app",
@@ -16,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={instrument.className}>{children}</body>
+      <body className={`bg-white tablet:bg-gray-light ${instrument.className}`}>{children}</body>
     </html>
   );
 }
