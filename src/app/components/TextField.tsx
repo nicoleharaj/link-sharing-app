@@ -33,6 +33,7 @@ export default function TextField({
   type = "text",
   icon = "/images/icon-link.svg",
   variant,
+  onClick,
   errorMessage,
   name,
   label,
@@ -50,8 +51,8 @@ export default function TextField({
           {name}
         </label>
       )}
-      <div className="relative">
-        <span className="absolute left-0 top-0 ml-[2px] flex h-full w-11 items-center justify-center select-none">
+      <div className="relative" onClick={onClick}>
+        <span className="absolute left-0 top-0 ml-[2px] flex h-full w-11 select-none items-center justify-center">
           <Image src={icon} width={16} height={16} alt="Text input icon" />
         </span>
         <input
@@ -63,7 +64,7 @@ export default function TextField({
         />
 
         {errorMessage && (
-          <div className="absolute right-0 top-0 mr-1 mt-[1px] flex h-full items-center justify-center px-2 text-sm text-red">
+          <div className="text-sm absolute right-0 top-0 mr-1 mt-[1px] flex h-full items-center justify-center px-2 text-red">
             <span className="bg-white px-2 py-1">{errorMessage}</span>
           </div>
         )}
