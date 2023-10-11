@@ -34,6 +34,7 @@ const config: Config = {
     colors: {
       transparent: "transparent",
       current: "currentColor",
+      black: "#000000",
       gray: {
         dark: "#333333",
         DEFAULT: "#737373",
