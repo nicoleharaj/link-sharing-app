@@ -6,31 +6,48 @@ import { NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
-  const requestUrl = new URL(request.url);
-  const { avatar, firstName, lastName, email } = await request.json();
+  const formData = await request.formData();
+
+  const firstName = formData.get("first_name") as string;
+  const lastName = formData.get("last_name") as string;
+  const email = formData.get("email") as string;
+  const avatar = formData.get("avatar") as File;
+
   const supabase = createRouteHandlerClient<Database>({ cookies });
   const currentUser = await supabase.auth.getSession().then((data) => data);
 
+  if (currentUser.data.session?.user.email !== email) {
+    // Change email
+    const { data, error: updateEmailError } = await supabase.auth.updateUser({
+      email: email,
+    });
+
+    if (updateEmailError) {
+      return NextResponse.json({ error: updateEmailError }, { status: 400 });
+    }
+  }
   // TODO upload avatar
 
-  // Change email
-  const { data, error: updateEmailError } = await supabase.auth.updateUser({
-    email: email,
-  });
+  const file = avatar;
+  const fileExt = avatar.name.split(".").pop();
+  const fileName = `${Math.random()}.${fileExt}`;
+  const filePath = `${fileName}`;
 
-  console.log(data);
+  let { data: uploadData, error: uploadError } = await supabase.storage
+    .from("avatars")
+    .upload(filePath, file);
 
-  if (updateEmailError) {
-    return NextResponse.json({ error: updateEmailError }, { status: 400 });
-  }
+  let avatarUrl = supabase.storage
+    .from("avatars")
+    .getPublicUrl(uploadData!.path);
 
   const { error: updateProfileError } = await supabase
     .from("profiles")
     .update({
       first_name: firstName,
       last_name: lastName,
-      email: email,
       updated_at: new Date().toJSON(), // current time
+      avatar: avatarUrl.data.publicUrl,
     })
     .eq("id", currentUser.data.session?.user.id)
     .select();

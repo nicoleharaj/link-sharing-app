@@ -5,11 +5,13 @@ import Container from "../components/UI/Container";
 import Navbar from "../components/Navbar";
 import { Database } from "@/lib/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProfileInput from "../components/TextField/ProfileInput";
 import Mockup from "../components/Mockup";
 import UploadButton from "../components/UploadButton";
+import toast, { Toaster } from "react-hot-toast";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function Page() {
   const supabase = createClientComponentClient<Database>();
@@ -33,9 +35,9 @@ export default function Page() {
         .eq("id", data.session.user.id)
         .single();
 
-      setEmail(profile.email);
-      setFirstName(profile.firstName);
-      setLastName(profile.lastName);
+      setEmail(data.session.user.email ?? "");
+      setFirstName(profile.first_name);
+      setLastName(profile.last_name);
     }
     getData();
   }, [router, supabase]);
@@ -43,17 +45,28 @@ export default function Page() {
   const handleUpdate = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const formData = new FormData(e.currentTarget);
+
     const data = await fetch("/api/profile/update", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-      }),
+      body: formData,
     }).then((res) => res.json());
+
+    toast.custom((t) => (
+      <AnimatePresence>
+        {t.visible && (
+          <motion.div
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ ease: "easeOut" }}
+            className="shadow-md rounded-full  bg-purple px-6 py-4 text-white"
+          >
+            Profile has been updated.
+          </motion.div>
+        )}
+      </AnimatePresence>
+    ));
   };
 
   return (
@@ -76,7 +89,7 @@ export default function Page() {
           >
             <Container className="bg-gray-light p-5 tablet:p-5">
               <h2 className="text-gray">Profile picture</h2>
-              <UploadButton />
+              <UploadButton name="avatar" />
               <p className="font-gray mt-6 text-body-s">
                 Image must be below 1024x1024px. Use PNG or JPG format.
               </p>
@@ -84,18 +97,21 @@ export default function Page() {
             <Container className="flex flex-col gap-3 bg-gray-light p-5 tablet:p-5">
               <ProfileInput
                 label="First name"
+                name="first_name"
                 className="w-full"
                 defaultValue={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
               />
               <ProfileInput
                 label="Last name"
+                name="last_name"
                 className="w-full"
                 defaultValue={lastName}
                 onChange={(e) => setLastName(e.target.value)}
               />
               <ProfileInput
                 label="Email"
+                name="email"
                 className="w-full"
                 defaultValue={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -106,6 +122,7 @@ export default function Page() {
             </div>
           </form>
         </Container>
+        <Toaster position="top-right" toastOptions={{ duration: 2000 }} />
       </main>
     </>
   );

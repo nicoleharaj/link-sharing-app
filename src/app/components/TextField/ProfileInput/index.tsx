@@ -1,7 +1,5 @@
-import { InputHTMLAttributes } from "react";
 import { cn } from "../../../utils/merge";
-import Image from "next/image";
-import { VariantProps, cva } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 import { TextFieldProps } from "..";
 
 const textInputVariants = cva(
@@ -34,7 +32,7 @@ export default function ProfileInput({
   ...props
 }: TextFieldProps) {
   return (
-    <div className="flex flex-col items-center gap-1 tablet:flex-row">
+    <div className="flex flex-col gap-1 tablet:flex-row tablet:items-center">
       {label ? (
         <label
           htmlFor={id}
