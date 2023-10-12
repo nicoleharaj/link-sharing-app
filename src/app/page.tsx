@@ -37,7 +37,7 @@ export default async function Home() {
               the world!
             </p>
           </div>
-          <div className="px-6">
+          <div className="px-6 tablet:px-0">
             <Button className="mt-4 w-full" variant="secondary">
               + Add new link
             </Button>

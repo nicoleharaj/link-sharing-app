@@ -53,7 +53,10 @@ export default function Page() {
     console.log(previewImage);
   };
 
-  const handleUpdate = (e: FormEvent<HTMLFormElement>) => {};
+  const handleUpdate = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(e.currentTarget)
+  };
 
   return (
     <>
@@ -69,7 +72,7 @@ export default function Page() {
               Add your details to create a personal touch to your profile.
             </p>
           </div>
-          <div className="mt-10 flex flex-col gap-6 px-6">
+          <form className="mt-10 flex flex-col gap-6 px-6" onSubmit={handleUpdate}>
             <Container className="bg-gray-light p-5 tablet:p-5">
               <h2 className="text-gray">Profile picture</h2>
               {previewImage ? (
@@ -111,30 +114,27 @@ export default function Page() {
             </Container>
             <Container className="flex flex-col gap-3 bg-gray-light p-5 tablet:p-5">
               <ProfileInput
-                label="First name*"
-                noIcon
+                label="First name"
                 className="w-full"
                 defaultValue={firstName}
               />
               <ProfileInput
-                label="Last name*"
-                noIcon
+                label="Last name"
                 className="w-full"
                 defaultValue={lastName}
               />
               <ProfileInput
                 label="Email"
-                noIcon
                 className="w-full"
                 defaultValue={email}
               />
             </Container>
-          </div>
           <div className="mt-6 flex border-t border-gray-border px-6 pb-6 tablet:justify-end tablet:pb-0 tablet:pt-0">
-            <Button className="mt-4 w-full tablet:w-fit" disabled>
+            <Button className="mt-4 w-full tablet:w-fit">
               Save
             </Button>
           </div>
+          </form>
         </Container>
       </main>
     </>
