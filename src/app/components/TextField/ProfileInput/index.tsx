@@ -34,11 +34,11 @@ export default function ProfileInput({
   ...props
 }: TextFieldProps) {
   return (
-    <div className="flex flex-col gap-1 tablet:flex-row">
+    <div className="flex flex-col items-center gap-1 tablet:flex-row">
       {label ? (
         <label
           htmlFor={id}
-          className="text-body-s text-gray-dark tablet:text-base tablet:text-gray tablet:w-1/2"
+          className="text-body-s text-gray-dark tablet:w-1/2 tablet:text-base tablet:text-gray"
         >
           {label}
         </label>

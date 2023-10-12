@@ -3,7 +3,7 @@ import { VariantProps, cva } from "class-variance-authority";
 import { cn } from "../utils/merge";
 
 const buttonVariants = cva(
-  "w-fit px-[27px] py-[11px] font-semibold flex items-center justify-center gap-2 rounded-lg disabled:opacity-25 disabled:cursor-not-allowed outline-none focus:ring-4 focus:ring-purple/25",
+  "w-fit px-[16px] py-[11px] font-semibold flex items-center justify-center gap-2 rounded-lg disabled:opacity-25 disabled:cursor-not-allowed outline-none focus:ring-4 focus:ring-purple/25 tablet:px-[27px]",
   {
     variants: {
       variant: {
