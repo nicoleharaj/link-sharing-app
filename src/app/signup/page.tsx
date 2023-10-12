@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import Button from "../components/Button";
+import Button from "../components/UI/Button";
 import TextField from "../components/TextField";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
