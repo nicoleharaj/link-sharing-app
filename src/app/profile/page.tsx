@@ -1,23 +1,20 @@
 "use client";
 
-import Image from "next/image";
-import Button from "../components/Button";
-import Container from "../components/Container";
+import Button from "../components/UI/Button";
+import Container from "../components/UI/Container";
 import Navbar from "../components/Navbar";
 import { Database } from "@/lib/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { UploadImageIcon } from "../components/UI/Icons";
 import ProfileInput from "../components/TextField/ProfileInput";
 import Mockup from "../components/Mockup";
+import UploadButton from "../components/UploadButton";
 
 export default function Page() {
   const supabase = createClientComponentClient<Database>();
   const router = useRouter();
-  const fileRef = useRef<HTMLInputElement>(null);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [imageError, setImageError] = useState<string | null>(null);
+
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -30,32 +27,33 @@ export default function Page() {
         return;
       }
 
-      if (data.session.user.email) setEmail(data.session.user.email);
-      if (data.session.user.user_metadata.firstName)
-        setFirstName(data.session.user.user_metadata.firstName);
-      if (data.session.user.user_metadata.lastName)
-        setLastName(data.session.user.user_metadata.lastName);
+      let { data: profile } = await supabase
+        .from("profiles")
+        .select()
+        .eq("id", data.session.user.id)
+        .single();
+
+      setEmail(profile.email);
+      setFirstName(profile.firstName);
+      setLastName(profile.lastName);
     }
     getData();
-  }, [router, supabase.auth]);
+  }, [router, supabase]);
 
-  const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const reader = new FileReader();
-
-      reader.addEventListener("load", () => {
-        setPreviewImage(reader.result as string);
-      });
-
-      reader.readAsDataURL(e.target.files[0]);
-    }
-
-    console.log(previewImage);
-  };
-
-  const handleUpdate = (e: FormEvent<HTMLFormElement>) => {
+  const handleUpdate = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(e.currentTarget)
+
+    const data = await fetch("/api/profile/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+      }),
+    }).then((res) => res.json());
   };
 
   return (
@@ -72,42 +70,13 @@ export default function Page() {
               Add your details to create a personal touch to your profile.
             </p>
           </div>
-          <form className="mt-10 flex flex-col gap-6 px-6" onSubmit={handleUpdate}>
+          <form
+            className="mt-10 flex flex-col gap-6 px-6"
+            onSubmit={handleUpdate}
+          >
             <Container className="bg-gray-light p-5 tablet:p-5">
               <h2 className="text-gray">Profile picture</h2>
-              {previewImage ? (
-                <Button
-                  className={`relative mt-4 h-[193px] w-[193px] overflow-hidden px-0 py-0 text-white tablet:px-0`}
-                  onClick={() => fileRef.current?.click()}
-                >
-                  <div className="z-10 flex h-full w-[193px] flex-col items-center justify-center bg-black/50 py-[60px]">
-                    <UploadImageIcon className="fill-white" />
-                    <span>Change Image</span>
-                  </div>
-                  <Image
-                    src={previewImage}
-                    fill
-                    alt="Uploaded preview"
-                    className="object-cover"
-                  />
-                </Button>
-              ) : (
-                <Button
-                  className="mt-4 h-[193px] w-[193px] flex-col bg-purple-light px-10 py-[60px] text-purple"
-                  onClick={() => fileRef.current?.click()}
-                >
-                  <UploadImageIcon className="fill-purple" />
-                  <span>+ Upload Image</span>
-                </Button>
-              )}
-              <input
-                type="file"
-                ref={fileRef}
-                multiple={false}
-                hidden
-                onChange={handleUpload}
-                accept="image/png, image/jpeg, image/jpg"
-              />
+              <UploadButton />
               <p className="font-gray mt-6 text-body-s">
                 Image must be below 1024x1024px. Use PNG or JPG format.
               </p>
@@ -117,23 +86,24 @@ export default function Page() {
                 label="First name"
                 className="w-full"
                 defaultValue={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
               />
               <ProfileInput
                 label="Last name"
                 className="w-full"
                 defaultValue={lastName}
+                onChange={(e) => setLastName(e.target.value)}
               />
               <ProfileInput
                 label="Email"
                 className="w-full"
                 defaultValue={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </Container>
-          <div className="mt-6 flex border-t border-gray-border px-6 pb-6 tablet:justify-end tablet:pb-0 tablet:pt-0">
-            <Button className="mt-4 w-full tablet:w-fit">
-              Save
-            </Button>
-          </div>
+            <div className="mt-6 flex border-t border-gray-border px-6 pb-6 tablet:justify-end tablet:pb-0 tablet:pt-0">
+              <Button className="mt-4 w-full tablet:w-fit">Save</Button>
+            </div>
           </form>
         </Container>
       </main>
