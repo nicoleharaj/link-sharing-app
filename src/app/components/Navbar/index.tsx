@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Container from "../Container";
-import Button from "../Button";
+import Container from "../UI/Container";
+import Button from "../UI/Button";
 import Image from "next/image";
 import Tabs from "../Tabs";
 
