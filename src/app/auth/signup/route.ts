@@ -29,7 +29,9 @@ export async function POST(request: Request) {
     password,
     options: {
       data: {
-        name: email,
+        email: email,
+        first_name: "",
+        last_name: "",
         avatar: data.publicUrl,
       },
       emailRedirectTo: `${requestUrl.origin}/auth/callback`,
