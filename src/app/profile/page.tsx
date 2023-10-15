@@ -60,7 +60,7 @@ export default function Page() {
             animate={{ x: 0, opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ ease: "easeOut" }}
-            className="shadow-md rounded-full  bg-purple px-6 py-4 text-white"
+            className="shadow rounded-xl  bg-purple px-6 py-4 text-white"
           >
             Profile has been updated.
           </motion.div>
@@ -84,7 +84,7 @@ export default function Page() {
             </p>
           </div>
           <form
-            className="mt-10 flex flex-col gap-6 px-6"
+            className="mt-2 flex flex-col gap-6 px-6"
             onSubmit={handleUpdate}
           >
             <Container className="bg-gray-light p-5 tablet:p-5">
@@ -117,7 +117,7 @@ export default function Page() {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </Container>
-            <div className="mt-6 flex border-t border-gray-border px-6 pb-6 tablet:justify-end tablet:pb-0 tablet:pt-0">
+            <div className="mt-3 flex border-t border-gray-border px-6 pb-6 tablet:justify-end tablet:pb-0 tablet:pt-0">
               <Button className="mt-4 w-full tablet:w-fit">Save</Button>
             </div>
           </form>
