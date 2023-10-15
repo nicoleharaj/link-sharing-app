@@ -27,15 +27,17 @@ export default function Navbar() {
 
         <Tabs />
 
-        <Button variant="secondary">
-          <Image
-            src="/images/icon-preview-header.svg"
-            width={20}
-            height={20}
-            alt="Sign out icon"
-          />
-          <span className="sr-only tablet:not-sr-only">Preview</span>
-        </Button>
+        <Link href="/preview">
+          <Button variant="secondary">
+            <Image
+              src="/images/icon-preview-header.svg"
+              width={20}
+              height={20}
+              alt="Sign out icon"
+            />
+            <span className="sr-only tablet:not-sr-only">Preview</span>
+          </Button>
+        </Link>
       </Container>
     </nav>
   );

@@ -20,7 +20,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`bg-gray-light  text-gray-dark ${instrument.className}`}>
+      <body
+        className={`bg-gray-light  text-gray-dark ${instrument.className} select-none`}
+      >
         {children}
       </body>
     </html>
