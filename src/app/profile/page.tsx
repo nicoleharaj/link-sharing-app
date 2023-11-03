@@ -9,7 +9,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProfileInput from "../components/TextField/ProfileInput";
 import Mockup from "../components/Mockup";
-import UploadButton from "../components/UploadButton";
+import UploadButton from "../components/UI/UploadButton";
 import toast, { Toaster } from "react-hot-toast";
 import { AnimatePresence, motion } from "framer-motion";
 
