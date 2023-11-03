@@ -45,8 +45,8 @@ export default function Page() {
       <Navbar />
       <main className="mt-[60px] flex h-[calc(100vh-102px)] items-start justify-center gap-6 p-4 tablet:p-6">
         <div className="flex flex-col items-center gap-4">
-          <div className="relative h-[104px] w-[104px] overflow-hidden rounded-full border-4 border-purple">
-            <Image src={avatar} fill alt="Avatar" className="" />
+          <div className="relative h-[104px] w-[104px] overflow-hidden rounded-full border-4 border-purple bg-purple">
+            <Image src={avatar} fill alt="Avatar" />
           </div>
           <div className="flex flex-col gap-2">
             <h1 className="text-heading-md-web font-bold ">
