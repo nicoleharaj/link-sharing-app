@@ -5,8 +5,8 @@ import {
   useRef,
   useState,
 } from "react";
-import Button from "./UI/Button";
-import { UploadImageIcon } from "./UI/Icons";
+import Button from "./Button";
+import { UploadImageIcon } from "./Icons";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export default function UploadButton({
