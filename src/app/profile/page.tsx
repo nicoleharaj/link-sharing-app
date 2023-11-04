@@ -60,7 +60,7 @@ export default function Page() {
             animate={{ x: 0, opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ ease: "easeOut" }}
-            className="shadow rounded-xl  bg-purple px-6 py-4 text-white"
+            className="rounded-xl bg-purple  px-6 py-4 text-white shadow"
           >
             Profile has been updated.
           </motion.div>

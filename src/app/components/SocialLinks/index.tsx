@@ -1,26 +1,28 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import Button from "../UI/Button";
 import Container from "../UI/Container";
 import Image from "next/image";
 import LinkCreate from "./LinkCreate";
 
-type socialLinks = {
-  type:
-    | "github"
-    | "frontend_mentor"
-    | "twitter"
-    | "linkedIn"
-    | "youTube"
-    | "facebook"
-    | "twitch"
-    | "devTo"
-    | "codewars"
-    | "freeCodeCamp"
-    | "gitLab"
-    | "hashnode"
-    | "stackOverflow";
+export type validSocials =
+  | "github"
+  | "frontendMentor"
+  | "twitter"
+  | "linkedIn"
+  | "youTube"
+  | "facebook"
+  | "twitch"
+  | "devTo"
+  | "codewars"
+  | "freeCodeCamp"
+  | "gitLab"
+  | "hashnode"
+  | "stackOverflow";
+
+export type socialLinks = {
+  type: validSocials;
   href: string;
 };
 
@@ -28,15 +30,20 @@ export default function SocialLinks() {
   const [links, setLinks] = useState<Array<socialLinks>>([]);
 
   const handleAddLink = useCallback(() => {
-    setLinks([...links, { type: "github", href: "https://linkedin.com" }]);
+    setLinks([...links, { type: "github", href: "https://github.com" }]);
   }, [links]);
 
   useEffect(() => {
     handleAddLink;
   }, [handleAddLink]);
 
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(links);
+  };
+
   return (
-    <form className="flex flex-col gap-2">
+    <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
       <div className="px-6 tablet:px-0">
         <Button
           className="mb-4 mt-4 w-full"
@@ -72,9 +79,9 @@ export default function SocialLinks() {
           {links.map((link, index) => (
             <LinkCreate
               key={index}
-              value={link.type}
               href={link.href}
               index={index}
+              setLinks={setLinks}
             />
           ))}
         </>

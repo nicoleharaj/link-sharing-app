@@ -1,117 +1,55 @@
 "use client";
 
-import { useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import Container from "../../UI/Container";
-import Image from "next/image";
 import TextField from "../../TextField";
+import Dropdown from "./Dropdown";
+import { platforms } from "./platforms";
+import { socialLinks, validSocials } from "..";
 
 export default function LinkCreate({
-  href,
-  value,
   index,
+  setLinks,
 }: {
   href: string;
-  value: string;
   index: number;
+  setLinks: Dispatch<SetStateAction<socialLinks[]>>;
 }) {
-  const [showMenu, setShowMenu] = useState(false);
-  const platforms = [
-    {
-      value: "github",
-      label: "GitHub",
-      icon: "/images/icon-github.svg",
-      placeholder: "https://www.github.com/johnappleseed",
-    },
-    {
-      value: "frontendMentor",
-      label: "Frontend Mentor",
-      icon: "/images/icon-frontend-mentor.svg",
-      placeholder: "https://www.frontendmentor.io/profile/johnappleseed",
-    },
-    {
-      value: "twitter",
-      label: "Twitter",
-      icon: "/images/icon-twitter.svg",
-      placeholder: "https://www.twitter.com/johnappleseed",
-    },
-    {
-      value: "linkedIn",
-      label: "LinkedIn",
-      icon: "/images/icon-linkedin.svg",
-      placeholder: "https://www.linkedin.com/in/johnappleseed",
-    },
-    {
-      value: "youTube",
-      label: "YouTube",
-      icon: "/images/icon-youtube.svg",
-      placeholder: "https://www.youtube.com/@johnappleseed",
-    },
-  ];
   const [currentPlatform, setCurrentPlatform] = useState(platforms[0]);
 
-  const handleSelect = (platform: {
-    value: string;
-    label: string;
-    icon: string;
-    placeholder: string;
-  }) => {
-    setCurrentPlatform(platform);
-    setShowMenu(false);
+  const handleRemove = () => {
+    setLinks((prevLinks) => prevLinks.filter((value, i) => i !== index));
+  };
+
+  const handleUpdate = (e: ChangeEvent<HTMLInputElement>) => {
+    setLinks((links) =>
+      links.map((item, i) =>
+        i === index
+          ? { ...item, href: e.target.value, type: currentPlatform.value }
+          : item,
+      ),
+    );
   };
 
   return (
     <Container className="relative mx-6 bg-gray-light">
       <div className="flex justify-between text-gray">
         <h2 className="text-heading-sm font-bold">Link #{index + 1}</h2>
-        <button type="button">Remove</button>
+        <button type="button" onClick={handleRemove}>
+          Remove
+        </button>
       </div>
       <h3 className="text-body-s text-gray-dark">Platform</h3>
-      <button
-        type="button"
-        onClick={() => setShowMenu(!showMenu)}
-        className={
-          "relative flex w-full items-center gap-3 rounded-lg border border-gray-border bg-white px-4 py-3 focus:border-purple focus:shadow-active active:border-purple active:shadow-active"
-        }
-        aria-label="Platform select"
-      >
-        <Image src={currentPlatform.icon} alt="link" width={16} height={16} />
-        <span className="flex-grow text-left">{currentPlatform.label}</span>
-        <Image
-          src="/images/icon-chevron-down.svg"
-          alt=""
-          width={12}
-          height={6}
-          className={`${showMenu ? "rotate-180" : "rotate-0"}`}
-        />
-      </button>
-      {showMenu && (
-        <ul className="absolute z-20 mt-2 h-[148px] w-full overflow-y-scroll rounded-lg border border-gray-border bg-white px-4 py-3 shadow">
-          {platforms.map((platform) => (
-            <li
-              key={platform.value}
-              className="border-b border-gray-border py-3 first-of-type:py-0 first-of-type:pb-3 last-of-type:border-b-0 last-of-type:py-0 last-of-type:pt-3 only-of-type:py-0 only-of-type:pb-0 only-of-type:pt-0"
-            >
-              <button
-                value={platform.value}
-                className="flex w-full items-center gap-3"
-                onClick={() => handleSelect(platform)}
-                type="button"
-              >
-                <Image
-                  src={platform.icon}
-                  width={16}
-                  height={16}
-                  alt="Platform"
-                />
-                {platform.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-
+      <Dropdown
+        currentPlatform={currentPlatform}
+        setCurrentPlatform={setCurrentPlatform}
+      />
       <h3 className="text-body-s text-gray-dark">Link</h3>
-      <TextField className="w-full" placeholder={`e.g. ${currentPlatform.placeholder}`} />
+      <TextField
+        className="w-full"
+        placeholder={`e.g. ${currentPlatform.placeholder}`}
+        onChange={handleUpdate}
+      />
     </Container>
   );
 }
