@@ -12,35 +12,14 @@ import Mockup from "../components/Mockup";
 import UploadButton from "../components/UI/UploadButton";
 import toast, { Toaster } from "react-hot-toast";
 import { AnimatePresence, motion } from "framer-motion";
+import useUserProfile from "../hooks/useUserProfile";
 
 export default function Page() {
   const supabase = createClientComponentClient<Database>();
   const router = useRouter();
 
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
+  const { firstName, lastName, email} = useUserProfile();
 
-  useEffect(() => {
-    async function getData() {
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) {
-        router.replace("/login");
-        return;
-      }
-
-      let { data: profile } = await supabase
-        .from("profiles")
-        .select()
-        .eq("id", data.session.user.id)
-        .single();
-
-      setEmail(data.session.user.email ?? "");
-      setFirstName(profile.first_name);
-      setLastName(profile.last_name);
-    }
-    getData();
-  }, [router, supabase]);
 
   const handleUpdate = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -100,21 +79,18 @@ export default function Page() {
                 name="first_name"
                 className="w-full"
                 defaultValue={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
               />
               <ProfileInput
                 label="Last name"
                 name="last_name"
                 className="w-full"
                 defaultValue={lastName}
-                onChange={(e) => setLastName(e.target.value)}
               />
               <ProfileInput
                 label="Email"
                 name="email"
                 className="w-full"
                 defaultValue={email}
-                onChange={(e) => setEmail(e.target.value)}
               />
             </Container>
             <div className="mt-3 flex border-t border-gray-border px-6 pb-6 tablet:justify-end tablet:pb-0 tablet:pt-0">
