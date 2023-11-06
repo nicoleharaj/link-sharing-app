@@ -8,37 +8,14 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { Toaster } from "react-hot-toast";
 import Image from "next/image";
+import useUserProfile from "../hooks/useUserProfile";
 
 export default function Page() {
-  const supabase = createClientComponentClient<Database>();
-  const router = useRouter();
+  const { avatar, firstName, lastName, email, loading} = useUserProfile();
 
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [avatar, setAvatar] = useState<string>("");
-
-  useEffect(() => {
-    async function getData() {
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) {
-        router.replace("/login");
-        return;
-      }
-
-      let { data: profile } = await supabase
-        .from("profiles")
-        .select()
-        .eq("id", data.session.user.id)
-        .single();
-
-      setEmail(data.session.user.email ?? "");
-      setFirstName(profile.first_name);
-      setLastName(profile.last_name);
-      setAvatar(profile.avatar);
-    }
-    getData();
-  }, [router, supabase]);
+  if (loading) {
+    return <>loading...</>
+  }
 
   return (
     <>
