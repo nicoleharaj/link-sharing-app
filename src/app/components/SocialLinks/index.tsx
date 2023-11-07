@@ -56,7 +56,7 @@ export default function SocialLinks() {
       </div>
 
       {links.length === 0 ? (
-        <Container className="mx-6 flex flex-col items-center gap-6 bg-gray-light tablet:mx-0 tablet:p-20">
+        <Container className="mx-6 flex flex-col items-center gap-6 bg-gray-light tablet:mx-0 tablet:p-16">
           <div className="relative mt-[22.5px] h-[80px] w-[125px] tablet:m-0 tablet:h-[160px] tablet:w-[250px]">
             <Image
               src="/images/illustration-empty.svg"
@@ -75,7 +75,7 @@ export default function SocialLinks() {
           </p>
         </Container>
       ) : (
-        <>
+        <Container className="mx-5 flex flex-col gap-6 p-0 tablet:mx-0 tablet:p-0">
           {links.map((link, index) => (
             <LinkCreate
               key={index}
@@ -84,11 +84,16 @@ export default function SocialLinks() {
               setLinks={setLinks}
             />
           ))}
-        </>
+        </Container>
       )}
 
-      <div className="mt-4 flex border-t border-gray-border px-6 pb-6 tablet:justify-end tablet:pb-0 tablet:pt-0">
-        <Button className="mt-4 w-full tablet:w-fit">Save</Button>
+      <div className="mt-4 px-4 flex border-t border-gray-border pb-6 tablet:justify-end tablet:px-0 tablet:pb-0 tablet:pt-0">
+        <Button
+          className="mt-4 w-full tablet:w-fit"
+          disabled={links.length === 0}
+        >
+          Save
+        </Button>
       </div>
     </form>
   );

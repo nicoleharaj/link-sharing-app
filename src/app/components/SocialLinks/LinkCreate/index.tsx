@@ -5,7 +5,7 @@ import Container from "../../UI/Container";
 import TextField from "../../TextField";
 import Dropdown from "./Dropdown";
 import { platforms } from "./platforms";
-import { socialLinks, validSocials } from "..";
+import { socialLinks } from "..";
 
 export default function LinkCreate({
   index,
@@ -32,7 +32,7 @@ export default function LinkCreate({
   };
 
   return (
-    <Container className="relative mx-6 bg-gray-light">
+    <Container className="relative bg-gray-light tablet:p-5">
       <div className="flex justify-between text-gray">
         <h2 className="text-heading-sm font-bold">Link #{index + 1}</h2>
         <button type="button" onClick={handleRemove}>
