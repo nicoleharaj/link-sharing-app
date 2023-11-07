@@ -3,10 +3,7 @@
 import Button from "../components/UI/Button";
 import Container from "../components/UI/Container";
 import Navbar from "../components/Navbar";
-import { Database } from "@/lib/types/supabase";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { FormEvent } from "react";
 import ProfileInput from "../components/TextField/ProfileInput";
 import Mockup from "../components/Mockup";
 import UploadButton from "../components/UI/UploadButton";
@@ -15,9 +12,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import useUserProfile from "../hooks/useUserProfile";
 
 export default function Page() {
-  const supabase = createClientComponentClient<Database>();
-  const router = useRouter();
-
   const { firstName, lastName, email} = useUserProfile();
 
 
