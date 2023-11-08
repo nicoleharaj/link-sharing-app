@@ -16,19 +16,36 @@ export default function LinkCreate({
   setLinks: Dispatch<SetStateAction<socialLinks[]>>;
 }) {
   const [currentPlatform, setCurrentPlatform] = useState(platforms[0]);
+  const [error, setError] = useState(false);
 
   const handleRemove = () => {
     setLinks((prevLinks) => prevLinks.filter((value, i) => i !== index));
   };
 
   const handleUpdate = (e: ChangeEvent<HTMLInputElement>) => {
-    setLinks((links) =>
-      links.map((item, i) =>
-        i === index
-          ? { ...item, href: e.target.value, type: currentPlatform.value }
-          : item,
-      ),
-    );
+    let url = e.target.value.trim();
+
+    if (url === "") {
+      setError(false);
+      return;
+    }
+
+    if (!url.startsWith("https://")) {
+      url = "https://" + url;
+    }
+
+    if (url.match(currentPlatform.regex)) {
+      setError(false);
+      setLinks((links) =>
+        links.map((item, i) =>
+          i === index
+            ? { ...item, href: url, type: currentPlatform.value }
+            : item,
+        ),
+      );
+    } else {
+      setError(true);
+    }
   };
 
   return (
@@ -47,6 +64,7 @@ export default function LinkCreate({
       <h3 className="text-body-s text-gray-dark">Link</h3>
       <TextField
         className="w-full"
+        variant={error ? "error" : "default"}
         placeholder={`e.g. ${currentPlatform.placeholder}`}
         onChange={handleUpdate}
       />
