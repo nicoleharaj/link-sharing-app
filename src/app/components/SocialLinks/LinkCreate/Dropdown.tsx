@@ -17,6 +17,7 @@ export default function Dropdown({
     label: string;
     icon: string;
     placeholder: string;
+    regex: RegExp;
   }) => {
     setCurrentPlatform(platform);
     setShowMenu(false);
@@ -39,7 +40,7 @@ export default function Dropdown({
           alt=""
           width={12}
           height={6}
-          className={`${showMenu ? "rotate-180" : "rotate-0"}`}
+          className={`w-auto ${showMenu ? "rotate-180" : "rotate-0"}`}
         />
       </button>
       {showMenu && (
