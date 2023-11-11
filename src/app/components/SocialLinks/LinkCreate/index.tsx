@@ -6,17 +6,31 @@ import TextField from "../../TextField";
 import Dropdown from "./Dropdown";
 import { platforms } from "./platforms";
 import { socialLinks } from "..";
+import Image from "next/image";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 export default function LinkCreate({
   index,
-  setLinks,
+  id,
+  setLinks
 }: {
-  href: string;
   index: number;
+  id: number;
   setLinks: Dispatch<SetStateAction<socialLinks[]>>;
 }) {
   const [currentPlatform, setCurrentPlatform] = useState(platforms[0]);
   const [error, setError] = useState(false);
+
+  const { setActivatorNodeRef, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: id,
+    });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
   const handleRemove = () => {
     setLinks((prevLinks) => prevLinks.filter((value, i) => i !== index));
@@ -49,9 +63,27 @@ export default function LinkCreate({
   };
 
   return (
-    <Container className="relative bg-gray-light tablet:p-5">
-      <div className="flex justify-between text-gray">
-        <h2 className="text-heading-sm font-bold">Link #{index + 1}</h2>
+    <Container
+      className="relative bg-gray-light active:z-50 tablet:p-5"
+      ref={setNodeRef}
+      style={style}
+    >
+      <div className="group flex items-center justify-between gap-2 text-gray">
+        <button
+          aria-label="Drag-and-drop"
+          ref={setActivatorNodeRef}
+          {...listeners}
+        >
+          <Image
+            src="/images/icon-drag-and-drop.svg"
+            width={12}
+            height={6}
+            alt="Drag-and-drop icon"
+          />
+        </button>
+        <h2 className="flex-grow text-heading-sm font-bold">
+          Link #{index + 1}
+        </h2>
         <button type="button" onClick={handleRemove}>
           Remove
         </button>

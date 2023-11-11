@@ -5,6 +5,20 @@ import Button from "../UI/Button";
 import Container from "../UI/Container";
 import Image from "next/image";
 import LinkCreate from "./LinkCreate";
+import {
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+} from "@dnd-kit/sortable";
 
 export type validSocials =
   | "github"
@@ -22,6 +36,7 @@ export type validSocials =
   | "stackOverflow";
 
 export type socialLinks = {
+  id: number;
   type: validSocials;
   href: string;
 };
@@ -29,17 +44,42 @@ export type socialLinks = {
 export default function SocialLinks() {
   const [links, setLinks] = useState<Array<socialLinks>>([]);
 
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
   const handleAddLink = useCallback(() => {
-    setLinks([...links, { type: "github", href: "https://github.com" }]);
+    setLinks([
+      ...links,
+      { type: "github", href: "https://github.com", id: links.length + 1 },
+    ]);
   }, [links]);
 
   useEffect(() => {
     handleAddLink;
-  }, [handleAddLink]);
+  }, [handleAddLink, links]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(links);
+  };
+
+  const handleDragEnd = (e: DragEndEvent) => {
+    const { active, over } = e;
+
+    console.log(active, over)
+
+    if (over && active.id !== over.id) {
+      setLinks((links) => {
+        const oldIndex = links.findIndex(link => link.id === active.id);
+        const newIndex = links.findIndex(link => link.id === over.id);
+      
+        return arrayMove(links, oldIndex, newIndex);
+      });
+    }
   };
 
   return (
@@ -76,18 +116,26 @@ export default function SocialLinks() {
         </Container>
       ) : (
         <Container className="mx-5 flex flex-col gap-6 p-0 tablet:mx-0 tablet:p-0">
-          {links.map((link, index) => (
-            <LinkCreate
-              key={index}
-              href={link.href}
-              index={index}
-              setLinks={setLinks}
-            />
-          ))}
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext items={links.map((link) => link.id)}>
+              {links.map((link, index) => (
+                <LinkCreate
+                  key={link.id}
+                  id={link.id}
+                  index={index}
+                  setLinks={setLinks}
+                />
+              ))}
+            </SortableContext>
+          </DndContext>
         </Container>
       )}
 
-      <div className="mt-4 px-4 flex border-t border-gray-border pb-6 tablet:justify-end tablet:px-0 tablet:pb-0 tablet:pt-0">
+      <div className="mt-4 flex border-t border-gray-border px-4 pb-6 tablet:justify-end tablet:px-0 tablet:pb-0 tablet:pt-0">
         <Button
           className="mt-4 w-full tablet:w-fit"
           disabled={links.length === 0}
