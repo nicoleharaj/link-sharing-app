@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Mockup from "../Mockup";
+import Mockup from "../LiveMobilePreview";
 import SocialLinks, { SocialLink } from "../SocialLinks";
 import Container from "../UI/Container";
 
