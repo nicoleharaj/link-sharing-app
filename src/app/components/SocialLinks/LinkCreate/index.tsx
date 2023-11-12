@@ -5,7 +5,7 @@ import Container from "../../UI/Container";
 import TextField from "../../TextField";
 import Dropdown from "./Dropdown";
 import { platforms } from "./platforms";
-import { socialLinks } from "..";
+import { SocialLink } from "..";
 import Image from "next/image";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -17,7 +17,7 @@ export default function LinkCreate({
 }: {
   index: number;
   id: number;
-  setLinks: Dispatch<SetStateAction<socialLinks[]>>;
+  setLinks: Dispatch<SetStateAction<SocialLink[]>>;
 }) {
   const [currentPlatform, setCurrentPlatform] = useState(platforms[0]);
   const [error, setError] = useState(false);
@@ -92,6 +92,8 @@ export default function LinkCreate({
       <Dropdown
         currentPlatform={currentPlatform}
         setCurrentPlatform={setCurrentPlatform}
+        setLinks={setLinks}
+        linkId={id}
       />
       <h3 className="text-body-s text-gray-dark">Link</h3>
       <TextField
