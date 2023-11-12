@@ -9,10 +9,16 @@ export default function UserInfo() {
       {!loading && (
         <>
           <div className="relative h-[104px] w-[104px] overflow-hidden rounded-full border-4 border-purple bg-purple">
-            <Image src={avatar} fill alt="Avatar" />
+            <Image
+              src={avatar}
+              fill
+              alt="Avatar"
+              className="object-cover"
+              sizes="(max-width:250px)"
+            />
           </div>
-          <div className="flex flex-col gap-2">
-            <h1 className="text-heading-md-web font-bold ">
+          <div className="flex flex-col gap-1 text-center">
+            <h1 className="text-heading-md-mobile font-bold tablet:text-heading-md-web">
               {firstName} {lastName}
             </h1>
             <h2 className="text-gray">{email}</h2>
