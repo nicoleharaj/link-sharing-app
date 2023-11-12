@@ -26,20 +26,37 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: updateEmailError }, { status: 400 });
     }
   }
-  // TODO upload avatar
 
   const file = avatar;
+
   const fileExt = avatar.name.split(".").pop();
   const fileName = `${Math.random()}.${fileExt}`;
   const filePath = `${fileName}`;
 
-  let { data: uploadData, error: uploadError } = await supabase.storage
-    .from("avatars")
-    .upload(filePath, file);
+  if (file.size > 0) {
+    let { data: uploadData, error: uploadError } = await supabase.storage
+      .from("avatars")
+      .upload(filePath, file);
 
-  let avatarUrl = supabase.storage
-    .from("avatars")
-    .getPublicUrl(uploadData!.path);
+    let avatarUrl = supabase.storage
+      .from("avatars")
+      .getPublicUrl(uploadData!.path);
+
+    const { error: updateProfileError } = await supabase
+      .from("profiles")
+      .update({
+        first_name: firstName,
+        last_name: lastName,
+        updated_at: new Date().toJSON(), // current time
+        avatar: avatarUrl.data.publicUrl,
+      })
+      .eq("id", currentUser.data.session?.user.id)
+      .select();
+
+    if (updateProfileError) {
+      return NextResponse.json({ error: updateProfileError }, { status: 400 });
+    }
+  }
 
   const { error: updateProfileError } = await supabase
     .from("profiles")
@@ -47,7 +64,6 @@ export async function POST(request: Request) {
       first_name: firstName,
       last_name: lastName,
       updated_at: new Date().toJSON(), // current time
-      avatar: avatarUrl.data.publicUrl,
     })
     .eq("id", currentUser.data.session?.user.id)
     .select();
