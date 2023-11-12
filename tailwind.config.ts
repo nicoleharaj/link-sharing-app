@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
   content: [
@@ -48,8 +49,35 @@ const config: Config = {
         hover: "#BEADFF",
         light: "#EFEBFF",
       },
+      social: {
+        github: "#000000",
+        frontendmentor: "#FFF",
+        twitter: "#43B7E9",
+        linkedin: "#2D68FF",
+        youtube: "#EE3939",
+        facebook: "#2442AC",
+        twitch: "#EE3FC8",
+        devto: "#333333",
+        codewars: "#8A1A50",
+        freecodecamp: "#302267",
+        gitlab: "#EB4925",
+        hashnode: "#0330D1",
+        stackoverflow: "#EC7100",
+      }
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        ".hide-scrollbar": {
+          "-ms-overflow-style": "none",
+          "scrollbar-width": "none",
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        },
+      });
+    }),
+  ],
 };
 export default config;
