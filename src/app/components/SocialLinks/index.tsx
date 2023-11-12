@@ -1,6 +1,12 @@
 "use client";
 
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import {
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useCallback,
+  useEffect,
+} from "react";
 import Button from "../UI/Button";
 import Container from "../UI/Container";
 import Image from "next/image";
@@ -35,15 +41,19 @@ export type validSocials =
   | "hashnode"
   | "stackOverflow";
 
-export type socialLinks = {
+export type SocialLink = {
   id: number;
   type: validSocials;
   href: string;
 };
 
-export default function SocialLinks() {
-  const [links, setLinks] = useState<Array<socialLinks>>([]);
-
+export default function SocialLinks({
+  links,
+  setLinks,
+}: {
+  links: SocialLink[];
+  setLinks: Dispatch<SetStateAction<SocialLink[]>>;
+}) {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -56,7 +66,7 @@ export default function SocialLinks() {
       ...links,
       { type: "github", href: "https://github.com", id: links.length + 1 },
     ]);
-  }, [links]);
+  }, [links, setLinks]);
 
   useEffect(() => {
     handleAddLink;
@@ -70,13 +80,11 @@ export default function SocialLinks() {
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
 
-    console.log(active, over)
-
     if (over && active.id !== over.id) {
       setLinks((links) => {
-        const oldIndex = links.findIndex(link => link.id === active.id);
-        const newIndex = links.findIndex(link => link.id === over.id);
-      
+        const oldIndex = links.findIndex((link) => link.id === active.id);
+        const newIndex = links.findIndex((link) => link.id === over.id);
+
         return arrayMove(links, oldIndex, newIndex);
       });
     }
