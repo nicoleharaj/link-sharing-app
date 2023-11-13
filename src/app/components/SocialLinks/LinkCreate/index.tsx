@@ -71,6 +71,7 @@ export default function LinkCreate({
       <div className="group flex items-center justify-between gap-2 text-gray">
         <button
           aria-label="Drag-and-drop"
+          type="button"
           ref={setActivatorNodeRef}
           {...listeners}
         >
