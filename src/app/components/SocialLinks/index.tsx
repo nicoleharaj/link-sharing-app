@@ -79,7 +79,7 @@ export default function SocialLinks({
 
     const formData = new FormData(e.currentTarget);
 
-    const links = formData.entries()
+    const links = formData.entries();
 
     console.log(links);
 
@@ -96,7 +96,7 @@ export default function SocialLinks({
             animate={{ x: 0, opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ ease: "easeOut" }}
-            className="rounded-xl bg-purple  px-6 py-4 text-white shadow"
+            className="rounded-xl bg-purple px-6 py-4 text-white shadow"
           >
             Links have been updated.
           </motion.div>
@@ -132,7 +132,7 @@ export default function SocialLinks({
       </div>
 
       {links.length === 0 ? (
-        <Container className="mx-6 flex flex-col items-center gap-6 bg-gray-light tablet:mx-0 tablet:p-16">
+        <Container className="mx-3 flex flex-col items-center gap-3 bg-gray-light tablet:mx-0 tablet:p-16">
           <div className="relative mt-[22.5px] h-[80px] w-[125px] tablet:m-0 tablet:h-[160px] tablet:w-[250px]">
             <Image
               src="/images/illustration-empty.svg"
