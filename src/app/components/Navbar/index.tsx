@@ -6,7 +6,7 @@ import Tabs from "../Tabs";
 
 export default function Navbar() {
   return (
-    <nav className="w-full p-0 tablet:px-6 tablet:pt-6">
+    <nav className="w-full p-0 tablet:px-3 tablet:pt-3">
       <Container className="flex h-[74px] items-center justify-between rounded-none bg-white p-4 tablet:h-[78px] tablet:rounded-xl tablet:p-6">
         <Link href="/" aria-label="Home">
           <Image

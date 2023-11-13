@@ -13,11 +13,11 @@ export default function Mockup({ links }: { links: SocialLink[] }) {
   const { events } = useDraggable(ref);
 
   return (
-    <Container className="invisible hidden h-full desktop:visible desktop:flex desktop:w-1/2 desktop:flex-col desktop:items-center desktop:justify-center">
+    <Container className="invisible relative hidden h-full overflow-hidden desktop:visible desktop:flex desktop:w-1/2 desktop:flex-col desktop:items-center desktop:justify-center desktop:p-0">
       <div
         {...events}
         ref={ref}
-        className="hide-scrollbar z-20 flex h-[632px] w-[308px] cursor-grab touch-pan-y flex-col gap-[18px] overflow-y-scroll px-[35px] py-16"
+        className="absolute top-10 z-20 flex h-[632px] w-[308px] cursor-grab touch-pan-y flex-col gap-[18px] overflow-y-scroll px-[35px] py-16 hide-scrollbar"
         style={{ clipPath: "url(#iphoneClip)" }}
       >
         <UserInfo />
