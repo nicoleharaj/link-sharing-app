@@ -5,7 +5,7 @@ import Container from "../components/UI/Container";
 import Navbar from "../components/Navbar";
 import { FormEvent } from "react";
 import ProfileInput from "../components/TextField/ProfileInput";
-import Mockup from "../components/Mockup";
+import Mockup from "../components/LiveMobilePreview";
 import UploadButton from "../components/UI/UploadButton";
 import toast, { Toaster } from "react-hot-toast";
 import { AnimatePresence, motion } from "framer-motion";
@@ -46,7 +46,7 @@ export default function Page() {
     <>
       <Navbar />
       <main className="flex h-[calc(100vh-102px)] items-start justify-center gap-6 p-4 tablet:p-6">
-        <Mockup />
+        {/* <Mockup /> */}
         <Container className="w-full p-0 tablet:p-10 desktop:h-full desktop:w-4/5">
           <div className="flex flex-col gap-2 px-6 pt-6 tablet:px-0 tablet:pt-0">
             <h1 className="text-heading-md-mobile font-bold">
