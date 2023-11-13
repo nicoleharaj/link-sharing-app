@@ -25,6 +25,8 @@ import {
   arrayMove,
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
+import { AnimatePresence, motion } from "framer-motion";
+import toast, { Toaster } from "react-hot-toast";
 
 export type validSocials =
   | "github"
@@ -72,9 +74,35 @@ export default function SocialLinks({
     handleAddLink;
   }, [handleAddLink, links]);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleUpdate = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+
+    const links = formData.entries()
+
     console.log(links);
+
+    const data = await fetch("/api/profile/links/update", {
+      method: "POST",
+      body: formData,
+    }).then((res) => res.json());
+
+    toast.custom((t) => (
+      <AnimatePresence>
+        {t.visible && (
+          <motion.div
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ ease: "easeOut" }}
+            className="rounded-xl bg-purple  px-6 py-4 text-white shadow"
+          >
+            Links have been updated.
+          </motion.div>
+        )}
+      </AnimatePresence>
+    ));
   };
 
   const handleDragEnd = (e: DragEndEvent) => {
@@ -91,7 +119,7 @@ export default function SocialLinks({
   };
 
   return (
-    <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-2" onSubmit={handleUpdate}>
       <div className="px-6 tablet:px-0">
         <Button
           className="mb-4 mt-4 w-full"
@@ -151,6 +179,7 @@ export default function SocialLinks({
           Save
         </Button>
       </div>
+      <Toaster position="top-right" toastOptions={{ duration: 2000 }} />
     </form>
   );
 }
