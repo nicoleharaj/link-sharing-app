@@ -17,7 +17,7 @@ export default function Mockup({ links }: { links: SocialLink[] }) {
       <div
         {...events}
         ref={ref}
-        className="absolute top-10 z-20 flex h-[632px] w-[308px] cursor-grab touch-pan-y flex-col gap-[18px] overflow-y-scroll px-[35px] py-16 hide-scrollbar"
+        className="absolute top-1/2 -translate-y-1/2 z-20 flex h-[632px] w-[308px] cursor-grab touch-pan-y flex-col gap-[18px] overflow-y-scroll px-[35px] py-16 hide-scrollbar"
         style={{ clipPath: "url(#iphoneClip)" }}
       >
         <UserInfo />

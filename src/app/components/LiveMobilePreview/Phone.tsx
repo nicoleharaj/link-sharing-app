@@ -14,7 +14,7 @@ const Phone = ({
       height="632"
       fill="none"
       viewBox="0 0 308 632"
-      className="absolute top-10 my-auto"
+      className="absolute top-1/2 -translate-y-1/2 my-auto"
     >
       <defs>
         <clipPath id="iphoneClip" className="absolute left-0 top-0">
